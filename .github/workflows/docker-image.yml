@@ -1,10 +1,8 @@
 name: Docker Image CI
 
 on:
-  push:
-    branches: [ "master" ]
-  pull_request:
-    branches: [ "master" ]
+  release:
+    types: [created]
 
 jobs:
 
@@ -13,6 +11,20 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: yc-actions/yc-cr-login@v0.1-alpha
+      with:
+          yc-sa-json-credentials: ${{ secrets.YANDEX_CLOUD_KEY }}
+    
+    - name: Set Image Tag
+      id: set_tag
+      run: echo "IMAGE_TAG=$(date +%s)" >> $GITHUB_ENV
+
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag cr.yandex/crpe51e4v7vs5p6ahf5m/go-uuid:$(date +%s)
+      env:
+        CR_REGISTRY: crpe51e4v7vs5p6ahf5m
+        CR_REPO: go-uuid
+        IMAGE_TAG: ${{ github.sha }}
+      run: |
+        docker build . --file Dockerfile --tag cr.yandex/${{ env.CR_REGISTRY }}/${{ env.CR_REPO }}:${{ env.IMAGE_TAG }}
+        docker push cr.yandex/${{ env.CR_REGISTRY }}/${{ env.CR_REPO }}:${{ env.IMAGE_TAG }}
+  
