@@ -1,10 +1,12 @@
 # Created by https://www.toptal.com/developers/gitignore/api/direnv,linux,macos,windows,visualstudiocode,go,goland+iml
 # Edit at https://www.toptal.com/developers/gitignore?templates=direnv,linux,macos,windows,visualstudiocode,go,goland+iml
 
+.github
+.gitignore
+
 ### direnv ###
 .direnv
 .envrc
-.gitignore
 
 ### Go ###
 # If you prefer the allow list template instead of the deny list, see community template:
