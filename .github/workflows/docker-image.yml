@@ -11,7 +11,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: yc-actions/yc-cr-login@v2
+    - name: Login to Yandex Cloud
+      id: login-cr
+      uses: yc-actions/yc-cr-login@v2
       with:
           yc-sa-json-credentials: ${{ secrets.YANDEX_CLOUD_KEY }}
     
