@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: yc-actions/yc-cr-login@v0.1-alpha
+    - uses: yc-actions/yc-cr-login@v2
       with:
           yc-sa-json-credentials: ${{ secrets.YANDEX_CLOUD_KEY }}
     
