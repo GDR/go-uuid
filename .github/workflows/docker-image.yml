@@ -3,8 +3,6 @@ name: Docker Image CI
 on:
   release:
     types: [created]
-  push:
-    branches: [ "master" ]
 
 jobs:
 
@@ -27,6 +25,10 @@ jobs:
       run: echo "IMAGE_TAG=$(date +%s)" >> $GITHUB_ENV
 
     - name: Build the Docker image
+      env:
+        CR_REGISTRY: crpe51e4v7vs5p6ahf5m
+        CR_REPO: go-uuid
+        IMAGE_TAG: ${{ github.sha }}
       run: |
-        docker build --tag cr.yandex/crpe51e4v7vs5p6ahf5m/go-uuid:e722547a578669d5b09701e4d83967c7d11f28ef .
-        docker push cr.yandex/crpe51e4v7vs5p6ahf5m/go-uuid:e722547a578669d5b09701e4d83967c7d11f28ef
+        docker build . --file Dockerfile --tag cr.yandex/${{ env.CR_REGISTRY }}/${{ env.CR_REPO }}:${{ env.IMAGE_TAG }}
+        docker push cr.yandex/${{ env.CR_REGISTRY }}/${{ env.CR_REPO }}:${{ env.IMAGE_TAG }}
