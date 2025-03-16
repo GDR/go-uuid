@@ -13,6 +13,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
     - name: Login to Yandex Cloud
       id: login-cr
       uses: yc-actions/yc-cr-login@v2
