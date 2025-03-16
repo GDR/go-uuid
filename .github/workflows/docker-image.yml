@@ -28,7 +28,17 @@ jobs:
       env:
         CR_REGISTRY: crpe51e4v7vs5p6ahf5m
         CR_REPO: go-uuid
-        IMAGE_TAG: ${{ github.sha }}
+
+        IMAGE_HASH: ${{ github.sha }}
+        RELEASE_TAG: ${{ github.event.release.tag_name }}
       run: |
-        docker build . --file Dockerfile --tag cr.yandex/${{ env.CR_REGISTRY }}/${{ env.CR_REPO }}:${{ env.IMAGE_TAG }}
-        docker push cr.yandex/${{ env.CR_REGISTRY }}/${{ env.CR_REPO }}:${{ env.IMAGE_TAG }}
+        export DOCKER_IMAGE_LATEST_TAG=cr.yandex/${{ env.CR_REGISTRY }}/${{ env.CR_REPO }}:latest
+        export DOCKER_IMAGE_HASH_TAG=cr.yandex/${{ env.CR_REGISTRY }}/${{ env.CR_REPO }}:${{ env.IMAGE_HASH }}
+        export DOCKER_IMAGE_RELEASE_TAG=cr.yandex/${{ env.CR_REGISTRY }}/${{ env.CR_REPO }}:${{ env.RELEASE_TAG }}
+        
+        docker build . --file Dockerfile --tag ${{ env.DOCKER_IMAGE_HASH_TAG }}
+        docker tag ${{ env.DOCKER_IMAGE_HASH_TAG }} ${{ env.DOCKER_IMAGE_LATEST_TAG }}
+        docker tag ${{ env.DOCKER_IMAGE_HASH_TAG }} ${{ env.DOCKER_IMAGE_RELEASE_TAG }}
+        docker push ${{ env.DOCKER_IMAGE_HASH_TAG }}
+        docker push ${{ env.DOCKER_IMAGE_LATEST_TAG }}
+        docker push ${{ env.DOCKER_IMAGE_RELEASE_TAG }}
