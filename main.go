@@ -1,26 +1,61 @@
 package main
 
 import (
-	"github.com/google/uuid"
-	"net/http"
+	"fmt"
 	"log"
+	"os"
+	"strconv"
+
+	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 )
 
-var serverUUID = uuid.New().String()
+type Config struct {
+	Host string
+	Port int
+}
 
-func generateUUIDHandler(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "text/plain")
-	w.WriteHeader(http.StatusOK)
-	w.Write([]byte(serverUUID))
+func getEnv(key string, defaultValue string) string {
+	value := os.Getenv(key)
+	if value == "" {
+		return defaultValue
+	}
+	return value
+}
+
+func LoadConfig() (*Config, error) {
+	host := getEnv("HOST", "0.0.0.0")
+	portStr := getEnv("PORT", "80")
+
+	port, err := strconv.Atoi(portStr)
+	if err != nil {
+		return nil, fmt.Errorf("invalid PORT format: %v", err)
+	}
+
+	return &Config{
+		Host: host,
+		Port: port,
+	}, nil
+}
+
+var serveruuid = uuid.New().String()
+
+func uuidHandler(c *gin.Context) {
+	c.JSON(200, gin.H{
+		"uuid": serveruuid,
+	})
 }
 
 func main() {
-	port := os.Getenv("PORT")
-	if port == "" {
-		port = "8080"
+	config, err := LoadConfig()
+	if err != nil {
+		log.Fatal(err)
 	}
-	
-	http.HandleFunc("/uuid", generateUUIDHandler)
-	log.Println("Starting server on :" + port)
-	log.Fatal(http.ListenAndServe(":"+port, nil))
+
+	router := gin.Default()
+	router.SetTrustedProxies(nil)
+
+	router.GET("/", uuidHandler)
+
+	router.Run(fmt.Sprintf("%s:%d", config.Host, config.Port))
 }
