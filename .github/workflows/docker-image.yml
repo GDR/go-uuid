@@ -3,6 +3,8 @@ name: Docker Image CI
 on:
   release:
     types: [created]
+  push:
+    branches: [ "master" ]
 
 jobs:
 
@@ -15,18 +17,13 @@ jobs:
       id: login-cr
       uses: yc-actions/yc-cr-login@v2
       with:
-          yc-sa-json-credentials: ${{ secrets.YANDEX_CLOUD_KEY }}
+          yc-sa-json-credentials: ${{ secrets.YANDEX_CLOUD_KEY }} # Ensure this secret is set in your repository settings
     
     - name: Set Image Tag
       id: set_tag
       run: echo "IMAGE_TAG=$(date +%s)" >> $GITHUB_ENV
 
     - name: Build the Docker image
-      env:
-        CR_REGISTRY: crpe51e4v7vs5p6ahf5m
-        CR_REPO: go-uuid
-        IMAGE_TAG: ${{ github.sha }}
       run: |
-        docker build . --file Dockerfile --tag cr.yandex/${{ env.CR_REGISTRY }}/${{ env.CR_REPO }}:${{ env.IMAGE_TAG }}
-        docker push cr.yandex/${{ env.CR_REGISTRY }}/${{ env.CR_REPO }}:${{ env.IMAGE_TAG }}
-  
+        docker build --tag cr.yandex/crpe51e4v7vs5p6ahf5m/go-uuid:e722547a578669d5b09701e4d83967c7d11f28ef .
+        docker push cr.yandex/crpe51e4v7vs5p6ahf5m/go-uuid:e722547a578669d5b09701e4d83967c7d11f28ef
