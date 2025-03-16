@@ -57,5 +57,7 @@ func main() {
 
 	router.GET("/", uuidHandler)
 
+	log.Printf("Starting server on %s:%d", config.Host, config.Port)
 	router.Run(fmt.Sprintf("%s:%d", config.Host, config.Port))
+
 }

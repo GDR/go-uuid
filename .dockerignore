@@ -210,4 +210,7 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
+# Build files
+build/
+
 # End of https://www.toptal.com/developers/gitignore/api/direnv,linux,macos,windows,visualstudiocode,go,goland+iml

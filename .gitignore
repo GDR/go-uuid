@@ -1,6 +1,8 @@
 # Created by https://www.toptal.com/developers/gitignore/api/direnv,linux,macos,windows,visualstudiocode,go,goland+iml
 # Edit at https://www.toptal.com/developers/gitignore?templates=direnv,linux,macos,windows,visualstudiocode,go,goland+iml
 
+build/ 
+
 ### direnv ###
 .direnv
 # .envrc

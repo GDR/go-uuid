@@ -3,6 +3,8 @@ FROM golang:1.24.1-alpine AS builder
 
 RUN apk add --no-cache git
 
+ENV GOCACHE=/root/.cache/go-build
+
 WORKDIR /src
 
 COPY go.mod go.sum ./
@@ -10,7 +12,7 @@ RUN go mod download
 
 COPY . .
 
-RUN CGO_ENABLED=0 GOOS=linux go build -ldflags="-s -w" -o uuidserver .
+RUN --mount=type=cache,target="/root/.cache/go-build" CGO_ENABLED=0 GOOS=linux go build -ldflags="-s -w" -o uuidserver .
 
 # --- Final Stage ---
 FROM alpine:latest
