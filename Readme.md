@@ -2,6 +2,25 @@
 
 A lightweight HTTP server written in Go that generates and returns UUIDs. Designed for simplicity and reliability in distributed systems.
 
+## Usage
+
+### Running the Docker Container
+To run the UUID Generation Server using Docker, you can use the following command:
+
+```bash
+docker run -p 8080:80 cr.yandex/crpe51e4v7vs5p6ahf5m/go-uuid:latest
+```
+
+This will start the server and make it accessible at `http://localhost:8080`.
+
+### Environment Variables
+The server uses the following environment variables:
+
+- `HOST`: The hostname or IP address the server will listen on. Default is `0.0.0.0`.
+- `PORT`: The port number the server will listen on. Default is `80`.
+
+You can set these variables when running the Docker container like this:
+
 ## Features
 
 - Generates version 4 UUIDs (random)
@@ -38,7 +57,7 @@ make run
 ### Endpoints
 **Generate UUID**
 ```bash
-curl http://localhost:8080/uuid
+curl http://localhost:8080
 ```
 Response:
 ```json
